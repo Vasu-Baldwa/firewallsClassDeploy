@@ -8,9 +8,10 @@ Function Build-VM{
     foreach ($vm in $vms){
       
       #Assign Variables
+      $VMName            = $vm.Name
       $Template          = Get-Template -Name $vm.Template
-      $Cluster           = $vm.Cluster
-      $Datastore         = Get-Datastore -Name $vm.Datastore
+      $Cluster           = Get-Cluster MAIN #$vm.Cluster
+      $Datastore         = Get-DatastoreCluster THE-VAULT #Get-Datastore -Name $vm.Datastore
       #$Custom            = "PowerCliOnly"
       $vCPU              = $vm.CPU
       $Memory            = $vm.RAM
@@ -25,8 +26,7 @@ Function Build-VM{
 
      
       Write-Host "Generating new VM per spec sheet" -ForegroundColor Yellow
-      New-VM -ResourcePool (Get-Cluster $Cluster) -Name $VMName -Location $Location -DiskStorageFormat Thin -Datastore $Datastore -Template $Template  -confirm:$False
-
+      New-VM -Name $VMName -Location $Location -ResourcePool $(Get-Cluster MAIN) -Datastore $(Get-DatastoreCluster THE-VAULT) -NumCpu 2 -MemoryGB 8 -DiskGB 40 -DiskStorageFormat Thin  -Template $Template  -confirm:$False
       #Sets the new VM as a variable to make configuration changes faster
       $NewVM = Get-VM -Name $VMName
 
@@ -37,8 +37,8 @@ Function Build-VM{
 
             
       #HDD
-      $NewVMHddSize = ($NewVM | Get-HardDisk | Where {$_.Name -eq "Hard disk 1"}).CapacityGB
-      IF ($HardDrive -gt $NewVMHddSize){$NewVM | Get-HardDisk | Where {$_.Name -eq "Hard disk 1"} | Set-HardDisk -CapacityGB $HardDrive -Confirm:$false}
+      #$NewVMHddSize = ($NewVM | Get-HardDisk | Where {$_.Name -eq "Hard disk 1"}).CapacityGB
+      #IF ($HardDrive -gt $NewVMHddSize){$NewVM | Get-HardDisk | Where {$_.Name -eq "Hard disk 1"} | Set-HardDisk -CapacityGB $HardDrive -Confirm:$false}
 
       #Powers on the VM
       Write-host "Powering on $VMName" -ForegroundColor Yellow
@@ -91,3 +91,5 @@ Function Config-VMNetwork{
     }
 }
 
+Build-VM
+Config-VMNetwork
