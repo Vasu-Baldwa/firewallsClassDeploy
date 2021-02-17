@@ -17,7 +17,7 @@ Function Build-VM{
       $Memory            = $vm.RAM
       $HardDrive         = $vm.HDD
       $Network           = $vm.Network
-      $Location          = Get-Folder $vm.Location
+      $Location          = $vm.Location
       $VMName            = $vm.Name
       $IP                = $vm.IP
       $SNM               = $vm.SubnetMask
@@ -26,7 +26,7 @@ Function Build-VM{
 
      
       Write-Host "Generating new VM per spec sheet" -ForegroundColor Yellow
-      New-VM -Name $VMName -Location $Location -ResourcePool $(Get-Cluster MAIN) -Datastore $(Get-DatastoreCluster THE-VAULT) -NumCpu 2 -MemoryGB 8 -DiskGB 40 -DiskStorageFormat Thin  -Template $Template  -confirm:$False
+      New-VM -Name $VMName -Location $Location -ResourcePool $(Get-Cluster MAIN) -Datastore $(Get-DatastoreCluster THE-VAULT) -confirm:$False
       #Sets the new VM as a variable to make configuration changes faster
       $NewVM = Get-VM -Name $VMName
 
