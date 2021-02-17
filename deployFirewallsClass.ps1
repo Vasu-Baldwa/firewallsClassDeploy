@@ -17,7 +17,7 @@ Function Build-VM{
       $Memory            = $vm.RAM
       $HardDrive         = $vm.HDD
       $Network           = $vm.Network
-      $Location          = $vm.Location
+      $Location          = Get-Folder $vm.Location
       $VMName            = $vm.Name
       $IP                = $vm.IP
       $SNM               = $vm.SubnetMask
