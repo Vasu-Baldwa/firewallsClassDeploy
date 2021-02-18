@@ -1,7 +1,8 @@
 import csv
+i=1
 with open("firewallsDC.csv",'w') as csvfile:
     w=csv.writer(csvfile, delimiter=',')
-    w.writerow(["Name","Template","Cluster","Datastore","Customization","Location","CPU","RAM","HDD","DiskFormat","Network","IP","Subnet","Gateway","DNS"])
+    w.writerow(["Name","Template","Datastore","Customization","Location","CPU","RAM","HDD","DiskFormat","Network","IP","Subnet","Gateway","DNS"])
     for i in range(17):
         w.writerow(["FirewallClassTeamX".replace('X',str(i)),"SS_S20_FirewallsAttackVM","MAIN","THE-VAULT","Hidden_Team_X".replace('X',str(i)),"2","8","40","Thin",'10.42.X.1/24'.replace('X', str(i)),
         '10.42.X.253'.replace('X', str(i)), '255.255.255.0', '10.42.X.1'.replace('X',str(i)), '8.8.8.8'])
